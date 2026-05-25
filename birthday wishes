@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Sastika ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cinzel:wght@500;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{ background:#050505; overflow-x:hidden; font-family:'Poppins',sans-serif; color:white; }
+
+/* ── BACKGROUND ── */
+.background{ position:fixed; width:100%; height:100%; top:0; left:0; overflow:hidden; z-index:-3; }
+.background video{ width:100%; height:100%; object-fit:cover; filter:brightness(0.35); }
+.overlay{
+  position:fixed; inset:0;
+  background: radial-gradient(circle at top, rgba(255,105,180,0.15), transparent 40%), rgba(0,0,0,0.55);
+  z-index:-2;
+}
+
+/* ── PARTICLES ── */
+.particle{ position:fixed; width:4px; height:4px; border-radius:50%; background:white; opacity:0.7; pointer-events:none; animation:float linear infinite; z-index:-1; }
+@keyframes float{ from{ transform:translateY(100vh) scale(0); } to{ transform:translateY(-10vh) scale(1.5); } }
+
+/* ── CONFETTI ── */
+.confetti-piece{
+  position:fixed;
+  width:10px; height:14px;
+  top:-20px;
+  pointer-events:none;
+  z-index:9999;
+  animation: confettiFall linear forwards;
+  border-radius:2px;
+}
+@keyframes confettiFall{
+  0%{ transform: translateY(0) rotate(0deg); opacity:1; }
+  100%{ transform: translateY(110vh) rotate(720deg); opacity:0; }
+}
+
+/* ── MUSIC BTN ── */
+#musicBtn{
+  position:fixed; top:18px; right:18px;
+  width:46px; height:46px;
+  border-radius:50%; border:none;
+  background:linear-gradient(135deg,#ff4da6,#ff80bf);
+  color:white; font-size:1.3rem;
+  cursor:pointer; z-index:200;
+  box-shadow:0 0 18px rgba(255,77,166,0.5);
+  transition:0.3s;
+}
+#musicBtn:hover{ transform:scale(1.12); box-shadow:0 0 30px rgba(255,77,166,0.8); }
+
+/* ── PASSWORD GATE ── */
+#passwordGate{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.96);
+  display:flex; justify-content:center; align-items:center;
+  z-index:9000; padding:20px;
+  backdrop-filter:blur(6px);
+}
+.gate-box{
+  text-align:center;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,105,180,0.3);
+  backdrop-filter:blur(18px);
+  border-radius:30px;
+  padding:50px 40px;
+  max-width:480px; width:100%;
+  animation:popupAnim 0.6s ease;
+}
+.gate-box .lock-icon{ font-size:4rem; margin-bottom:15px; animation:pulse 2s infinite; }
+@keyframes pulse{ 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
+.gate-box h2{ font-family:'Cinzel',serif; color:#ff8dc7; font-size:1.8rem; margin-bottom:10px; }
+.gate-box p{ color:#ccc; margin-bottom:30px; font-size:0.95rem; }
+
+#passwordInput{
+  width:100%;
+  padding:15px 20px;
+  border-radius:50px;
+  border:2px solid rgba(255,105,180,0.4);
+  background:rgba(255,255,255,0.07);
+  color:white;
+  font-size:1rem;
+  text-align:center;
+  outline:none;
+  letter-spacing:4px;
+  transition:0.3s;
+  font-family:'Poppins',sans-serif;
+}
+#passwordInput:focus{ border-color:#ff4da6; box-shadow:0 0 20px rgba(255,77,166,0.3); }
+#passwordInput::placeholder{ letter-spacing:1px; color:#aaa; }
+
+#unlockBtn{
+  margin-top:18px;
+  padding:15px 40px;
+  border:none; border-radius:50px;
+  background:linear-gradient(135deg,#ff4da6,#ff80bf);
+  color:white; font-size:1rem;
+  cursor:pointer; transition:0.4s;
+  box-shadow:0 0 25px rgba(255,77,166,0.4);
+  width:100%;
+}
+#unlockBtn:hover{ transform:scale(1.04) translateY(-3px); box-shadow:0 0 40px rgba(255,77,166,0.7); }
+
+#wrongMsg{
+  margin-top:14px;
+  color:#ff6b6b;
+  font-size:0.9rem;
+  display:none;
+  animation:shake 0.4s ease;
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0);}
+  25%{transform:translateX(-8px);}
+  75%{transform:translateX(8px);}
+}
+
+.hint-text{ margin-top:14px; color:rgba(255,141,199,0.6); font-size:0.8rem; }
+
+/* ── HERO ── */
+.hero{ min-height:100vh; display:flex; justify-content:center; align-items:center; flex-direction:column; text-align:center; padding:20px; position:relative; }
+.hero h1{ font-family:'Cinzel',serif; font-size:5rem; color:#ff8dc7; letter-spacing:4px; animation:glow 2s infinite alternate; }
+@keyframes glow{
+  from{ text-shadow:0 0 10px #ff5ca8; }
+  to{ text-shadow:0 0 20px #ff5ca8, 0 0 50px #ff5ca8; }
+}
+.typing{ margin-top:25px; font-size:1.2rem; max-width:700px; line-height:2; color:#f5f5f5; }
+
+/* ── COUNTDOWN ── */
+.countdown-section{ margin-top:40px; text-align:center; }
+.countdown-section p{ color:#ff8dc7; font-size:0.9rem; letter-spacing:1px; margin-bottom:12px; text-transform:uppercase; }
+.countdown-boxes{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+.cbox{
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,105,180,0.3);
+  border-radius:16px;
+  padding:14px 20px;
+  min-width:70px;
+  text-align:center;
+  backdrop-filter:blur(10px);
+}
+.cbox span{ display:block; font-size:2rem; font-weight:700; color:#ff8dc7; line-height:1; }
+.cbox small{ font-size:0.65rem; color:#ccc; letter-spacing:1px; text-transform:uppercase; }
+
+/* ── MAIN BTN ── */
+.main-btn{
+  margin-top:40px; padding:18px 45px; border:none; border-radius:60px;
+  background:linear-gradient(135deg,#ff4da6,#ff80bf);
+  color:white; font-size:1rem; cursor:pointer; transition:0.4s;
+  box-shadow:0 0 25px rgba(255,77,166,0.4);
+}
+.main-btn:hover{ transform:scale(1.08) translateY(-5px); box-shadow:0 0 45px rgba(255,77,166,0.8); }
+
+/* ── IMAGE SECTION ── */
+.image-section{ padding:100px 20px; display:flex; justify-content:center; }
+.image-box{
+  width:320px; height:420px; border-radius:35px; overflow:hidden; position:relative;
+  animation:floatImage 4s ease-in-out infinite; transition:0.5s;
+  box-shadow:0 0 40px rgba(255,105,180,0.25);
+}
+.image-box img{ width:100%; height:100%; object-fit:cover; transition:0.5s; }
+.image-box:hover{ transform:rotateY(10deg) rotateX(5deg) scale(1.05); box-shadow:0 0 60px rgba(255,105,180,0.65); }
+.image-box:hover img{ transform:scale(1.1); }
+@keyframes floatImage{ 50%{ transform:translateY(-18px); } }
+.image-box::after{
+  content:''; position:absolute; inset:-5px;
+  background:linear-gradient(45deg,#ff4da6,transparent,#ff80bf);
+  z-index:-1; border-radius:35px;
+  animation:rotate 5s linear infinite;
+}
+@keyframes rotate{ 100%{ transform:rotate(360deg); } }
+
+/* ── SURPRISES ── */
+.surprises{ padding:120px 20px; text-align:center; }
+.surprises h2{ font-size:3rem; margin-bottom:60px; font-family:'Cinzel',serif; color:#ff8dc7; }
+.card-container{ display:flex; justify-content:center; gap:30px; flex-wrap:wrap; }
+.card{
+  width:300px; padding:35px; border-radius:30px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  backdrop-filter:blur(12px); transition:0.5s; cursor:pointer;
+}
+.card:hover{ transform:translateY(-10px) scale(1.03); box-shadow:0 0 35px rgba(255,105,180,0.4); }
+.card span{ font-size:3rem; }
+.card h3{ margin-top:20px; color:#ff8dc7; }
+.card p{ margin-top:15px; line-height:1.9; color:#f3f3f3; }
+
+/* ── WISH BOARD ── */
+.wish-section{ padding:80px 20px; text-align:center; }
+.wish-section h2{ font-family:'Cinzel',serif; color:#ff8dc7; font-size:2.5rem; margin-bottom:30px; }
+.wish-input-row{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; max-width:600px; margin:0 auto 30px; }
+#wishInput{
+  flex:1; min-width:200px;
+  padding:14px 20px; border-radius:50px;
+  border:1.5px solid rgba(255,105,180,0.4);
+  background:rgba(255,255,255,0.07);
+  color:white; font-size:0.95rem; outline:none;
+  font-family:'Poppins',sans-serif;
+  transition:0.3s;
+}
+#wishInput:focus{ border-color:#ff4da6; box-shadow:0 0 15px rgba(255,77,166,0.3); }
+#wishInput::placeholder{ color:#aaa; }
+#sendWishBtn{
+  padding:14px 28px; border:none; border-radius:50px;
+  background:linear-gradient(135deg,#ff4da6,#ff80bf);
+  color:white; font-size:0.95rem; cursor:pointer; transition:0.3s;
+  box-shadow:0 0 18px rgba(255,77,166,0.4);
+}
+#sendWishBtn:hover{ transform:scale(1.05); }
+#wishBoard{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center; max-width:800px; margin:0 auto; }
+.wish-bubble{
+  background:rgba(255,77,166,0.15);
+  border:1px solid rgba(255,105,180,0.3);
+  border-radius:20px;
+  padding:12px 20px;
+  color:#f9d0e8;
+  backdrop-filter:blur(8px);
+  animation:popIn 0.4s ease;
+  font-family:'Dancing Script',cursive;
+  font-size:1.1rem;
+}
+@keyframes popIn{
+  from{ transform:scale(0.5); opacity:0; }
+  to{ transform:scale(1); opacity:1; }
+}
+
+/* ── POPUP ── */
+.popup{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.92);
+  display:none; justify-content:center; align-items:center;
+  z-index:100; padding:20px;
+}
+.popup-content{
+  width:90%; max-width:700px; padding:45px; border-radius:35px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.1);
+  backdrop-filter:blur(18px);
+  position:relative; text-align:center;
+  animation:popupAnim 0.6s ease;
+}
+@keyframes popupAnim{ from{opacity:0;transform:scale(0.7);} to{opacity:1;transform:scale(1);} }
+.popup-content h2{ color:#ff8dc7; margin-bottom:25px; font-family:'Cinzel',serif; }
+.popup-content p{ line-height:2; color:#f3f3f3; }
+.close{
+  position:absolute; top:15px; right:15px;
+  width:42px; height:42px; border:none; border-radius:50%;
+  background:#ff4da6; color:white; cursor:pointer;
+  font-size:1rem;
+}
+
+/* ── FINAL ── */
+.final{ padding:150px 20px; text-align:center; }
+.final h2{ font-size:4rem; font-family:'Cinzel',serif; color:#ff8dc7; }
+.final p{ margin-top:30px; max-width:800px; margin-inline:auto; line-height:2; font-size:1.1rem; color:#f0f0f0; }
+
+/* ── STARS ── */
+.star{
+  position:fixed; pointer-events:none; z-index:9998;
+  font-size:1.2rem;
+  animation: starPop 1s ease forwards;
+}
+@keyframes starPop{
+  0%{opacity:1; transform:scale(0) rotate(0deg);}
+  50%{opacity:1; transform:scale(1.5) rotate(180deg);}
+  100%{opacity:0; transform:scale(0.5) translateY(-60px) rotate(360deg);}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .hero h1{ font-size:2.7rem; }
+  .surprises h2{ font-size:2rem; }
+  .final h2{ font-size:2.5rem; }
+}
+
+/* ── UNLOCK ANIMATION ── */
+#unlockOverlay{
+  position:fixed; inset:0;
+  background:radial-gradient(circle, rgba(255,77,166,0.4), rgba(0,0,0,0.95));
+  display:none; justify-content:center; align-items:center;
+  z-index:8999;
+  flex-direction:column; gap:20px;
+  animation:fadeIn 0.4s ease;
+}
+@keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+.unlock-text{
+  font-family:'Cinzel',serif;
+  font-size:2.5rem;
+  color:#ff8dc7;
+  animation:glow 1s infinite alternate;
+  text-align:center;
+}
+.unlock-emoji{ font-size:5rem; animation:bounce 0.6s infinite alternate; }
+@keyframes bounce{ from{transform:translateY(0);} to{transform:translateY(-20px);} }
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND -->
+<div class="background">
+  <video autoplay muted loop>
+    <source src="https://cdn.coverr.co/videos/coverr-stars-in-the-night-sky-1560082116768?download=1080p" type="video/mp4">
+  </video>
+</div>
+<div class="overlay"></div>
+
+<!-- MUSIC BUTTON -->
+<button id="musicBtn" onclick="toggleMusic()" title="Toggle Music">🎵</button>
+<audio id="bgMusic" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+</audio>
+
+<!-- PASSWORD GATE -->
+<div id="passwordGate">
+  <div class="gate-box">
+    <div class="lock-icon">🔒</div>
+    <h2>Secret Birthday Surprise</h2>
+    <p>This is a special page made just for Sastika.<br>Enter the password to unlock the magic ✨</p>
+    <input type="password" id="passwordInput" placeholder="Enter password..." maxlength="30" onkeydown="if(event.key==='Enter') checkPassword()">
+    <button id="unlockBtn" onclick="checkPassword()">Unlock 🗝️</button>
+    <div id="wrongMsg">❌ Wrong password! Try again 💔</div>
+    <p class="hint-text">Hint: Her name 💖 (all lowercase)</p>
+  </div>
+</div>
+
+<!-- UNLOCK ANIMATION OVERLAY -->
+<div id="unlockOverlay">
+  <div class="unlock-emoji">🎉</div>
+  <div class="unlock-text">Welcome, Sastika! 💖</div>
+  <div class="unlock-text" style="font-size:1.2rem;font-family:'Poppins',sans-serif;color:#f0f0f0;">Your surprise is ready...</div>
+</div>
+
+<!-- MAIN CONTENT (hidden until unlocked) -->
+<div id="mainContent" style="display:none;">
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Happy Birthday Sastika ✨</h1>
+  <p class="typing" id="typing"></p>
+
+  <!-- COUNTDOWN -->
+  <div class="countdown-section">
+    <p>⏳ Age counter since your birthday</p>
+    <div class="countdown-boxes">
+      <div class="cbox"><span id="cd-days">0</span><small>Days</small></div>
+      <div class="cbox"><span id="cd-hours">0</span><small>Hours</small></div>
+      <div class="cbox"><span id="cd-mins">0</span><small>Mins</small></div>
+      <div class="cbox"><span id="cd-secs">0</span><small>Secs</small></div>
+    </div>
+  </div>
+
+  <button class="main-btn" onclick="scrollToSurprise()">Open Your Surprise 🎁</button>
+</section>
+
+<!-- IMAGE -->
+<section class="image-section">
+  <div class="image-box">
+    <img src="C:\Users\kesavan\Downloads\sas 1.jpeg" alt="Sastika">
+  </div>
+</section>
+
+<!-- SURPRISES -->
+<section class="surprises" id="surprises">
+  <h2>Choose Your Surprise 💖</h2>
+  <div class="card-container">
+
+    <div class="card" onclick="openPopup(1)">
+      <span>💌</span>
+      <h3>Secret Letter</h3>
+      <p>A heartfelt message specially written for you ✨</p>
+    </div>
+
+    <div class="card" onclick="openPopup(2)">
+      <span>📸</span>
+      <h3>Memory Vault</h3>
+      <p>The memories with you became unforgettable 🌙</p>
+    </div>
+
+    <div class="card" onclick="openPopup(3)">
+      <span>🌸</span>
+      <h3>One Last Thing</h3>
+      <p>Something I always wanted to say 💕</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- WISH BOARD -->
+<section class="wish-section">
+  <h2>Send Her a Wish 🌟</h2>
+  <div class="wish-input-row">
+    <input type="text" id="wishInput" placeholder="Write a birthday wish..." maxlength="80" onkeydown="if(event.key==='Enter') sendWish()">
+    <button id="sendWishBtn" onclick="sendWish()">Send 💌</button>
+  </div>
+  <div id="wishBoard"></div>
+</section>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <button class="close" onclick="closePopup()">✕</button>
+    <div id="popupText"></div>
+  </div>
+</div>
+
+<!-- FINAL -->
+<section class="final">
+  <h2>From Boobesh To Sastika 💖</h2>
+  <p>
+    Out of billions of people in this world,
+    I'm really glad I met YOU ✨<br><br>
+    Thank you for every smile,
+    every conversation,
+    and every beautiful memory 🌸<br><br>
+    You accidentally became one of the
+    most important people in my life 💕<br><br>
+    Happy Birthday Sastika 🎂
+  </p>
+</section>
+
+</div><!-- end mainContent -->
+
+<script>
+
+/* PASSWORD SYSTEM */
+const CORRECT_PASSWORD = "sastika"; // 🔑 Change this to whatever you want!
+
+function checkPassword(){
+  const val = document.getElementById("passwordInput").value.trim().toLowerCase();
+  const wrongMsg = document.getElementById("wrongMsg");
+
+  if(val === CORRECT_PASSWORD){
+    wrongMsg.style.display = "none";
+    document.getElementById("passwordGate").style.display = "none";
+    showUnlockAnimation();
+  } else {
+    wrongMsg.style.display = "block";
+    wrongMsg.style.animation = "none";
+    void wrongMsg.offsetWidth;
+    wrongMsg.style.animation = "shake 0.4s ease";
+    document.getElementById("passwordInput").value = "";
+    const box = document.querySelector(".gate-box");
+    box.style.animation = "none";
+    void box.offsetWidth;
+    box.style.animation = "shake 0.4s ease";
+  }
+}
+
+function showUnlockAnimation(){
+  const overlay = document.getElementById("unlockOverlay");
+  overlay.style.display = "flex";
+  triggerConfetti(120);
+  setTimeout(()=>{
+    overlay.style.opacity = "0";
+    overlay.style.transition = "opacity 0.8s";
+    setTimeout(()=>{
+      overlay.style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+      startTyping();
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+      triggerConfetti(60);
+    }, 900);
+  }, 2800);
+}
+
+/* CONFETTI */
+const confettiColors = ["#ff4da6","#ff80bf","#ffcce6","#fff176","#80deea","#b39ddb","#ff8a65"];
+
+function triggerConfetti(count){
+  for(let i=0; i<count; i++){
+    setTimeout(()=>{
+      const c = document.createElement("div");
+      c.classList.add("confetti-piece");
+      c.style.left = Math.random()*100 + "vw";
+      c.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+      c.style.animationDuration = (Math.random()*2+1.5) + "s";
+      c.style.animationDelay = (Math.random()*0.5) + "s";
+      c.style.transform = `rotate(${Math.random()*360}deg)`;
+      document.body.appendChild(c);
+      setTimeout(()=> c.remove(), 4000);
+    }, i*30);
+  }
+}
+
+/* STAR BURST ON CLICK */
+const starEmojis = ["✨","⭐","🌟","💫","🎉","💖","🌸"];
+document.addEventListener("click", e=>{
+  if(e.target.closest("#passwordGate") || e.target.closest("#unlockOverlay")) return;
+  const star = document.createElement("div");
+  star.classList.add("star");
+  star.textContent = starEmojis[Math.floor(Math.random()*starEmojis.length)];
+  star.style.left = (e.pageX - 12) + "px";
+  star.style.top  = (e.pageY - 12) + "px";
+  document.body.appendChild(star);
+  setTimeout(()=> star.remove(), 1000);
+});
+
+/* TYPING EFFECT */
+const text = "From Boobesh to the most amazing bestie, Sastika 💖";
+let i = 0;
+function startTyping(){
+  if(i < text.length){
+    document.getElementById("typing").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(startTyping, 50);
+  }
+}
+
+/* FLOATING PARTICLES */
+function createParticle(){
+  const p = document.createElement("div");
+  p.classList.add("particle");
+  p.style.left = Math.random()*100 + "vw";
+  p.style.animationDuration = Math.random()*5+4 + "s";
+  p.style.opacity = Math.random();
+  document.body.appendChild(p);
+  setTimeout(()=> p.remove(), 9000);
+}
+setInterval(createParticle, 150);
+
+/* MUSIC TOGGLE */
+let musicPlaying = false;
+function toggleMusic(){
+  const music = document.getElementById("bgMusic");
+  const btn   = document.getElementById("musicBtn");
+  if(musicPlaying){
+    music.pause();
+    btn.textContent = "🎵";
+    musicPlaying = false;
+  } else {
+    music.play().catch(()=>{});
+    btn.textContent = "🔊";
+    musicPlaying = true;
+  }
+}
+
+/* COUNTDOWN */
+function updateCountdown(){
+  // ✏️ Change month (0=Jan,1=Feb...4=May) and day to her actual birthday!
+  const birthday = new Date(new Date().getFullYear(), 4, 26); // May 25
+  const now      = new Date();
+  let diff = now - birthday;
+  if(diff < 0){
+    diff = birthday - now;
+    document.querySelector(".countdown-section p").textContent = "⏳ Countdown to your birthday";
+  } else {
+    document.querySelector(".countdown-section p").textContent = "🎂 Time since your birthday today";
+  }
+  const totalSec = Math.floor(Math.abs(diff)/1000);
+  const s = totalSec % 60;
+  const m = Math.floor(totalSec/60) % 60;
+  const h = Math.floor(totalSec/3600) % 24;
+  const d = Math.floor(totalSec/86400);
+  document.getElementById("cd-days").textContent  = String(d).padStart(2,"0");
+  document.getElementById("cd-hours").textContent = String(h).padStart(2,"0");
+  document.getElementById("cd-mins").textContent  = String(m).padStart(2,"0");
+  document.getElementById("cd-secs").textContent  = String(s).padStart(2,"0");
+}
+
+/* SCROLL */
+function scrollToSurprise(){
+  document.getElementById("surprises").scrollIntoView({ behavior:"smooth" });
+}
+
+/* POPUPS */
+function openPopup(type){
+  const popup     = document.getElementById("popup");
+  const popupText = document.getElementById("popupText");
+  popup.style.display = "flex";
+
+  if(type===1){
+    popupText.innerHTML = `
+      <h2>💌 Secret Letter</h2>
+      <p>
+        Dear Sastika ✨<br><br>
+        Happy Birthday to the most beautiful soul 💖<br><br>
+        Thank you for every laugh, every conversation,
+        and every memory we created together 🌸<br><br>
+        You genuinely make life brighter
+        just by being yourself 🌙
+      </p>`;
+  } else if(type===2){
+    popupText.innerHTML = `
+      <h2>📸 Memory Vault</h2>
+      <p>
+        The random laughs, silly moments,
+        and conversations with you
+        somehow became my favorite memories 💕<br><br>
+        Some people become special unexpectedly ✨
+      </p>`;
+  } else {
+    popupText.innerHTML = `
+      <h2>🌸 One Last Thing...</h2>
+      <p>
+        Out of everyone in this world,
+        I'm really happy I met YOU 💖<br><br>
+        Never stop smiling,
+        never stop being yourself,
+        because you are genuinely amazing ✨
+      </p>`;
+  }
+  triggerConfetti(30);
+}
+
+function closePopup(){
+  document.getElementById("popup").style.display = "none";
+}
+
+/* WISH BOARD */
+function sendWish(){
+  const input = document.getElementById("wishInput");
+  const text  = input.value.trim();
+  if(!text) return;
+  const board  = document.getElementById("wishBoard");
+  const bubble = document.createElement("div");
+  bubble.classList.add("wish-bubble");
+  bubble.textContent = "💖 " + text;
+  board.appendChild(bubble);
+  input.value = "";
+  triggerConfetti(20);
+}
+
+/* 3D IMAGE MOVEMENT */
+const imageBox = document.querySelector(".image-box");
+document.addEventListener("mousemove", e=>{
+  const x = (window.innerWidth/2  - e.pageX) / 30;
+  const y = (window.innerHeight/2 - e.pageY) / 30;
+  if(imageBox) imageBox.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+});
+
+</script>
+</body>
+</html>
